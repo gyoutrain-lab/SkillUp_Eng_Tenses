@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinical Communication & Tenses Exam Portal</title>
+    <style>
+        :root {
+            --primary: #0056b3;
+            --secondary: #28a745;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin: 0 0 10px 0;
+        }
+
+        h2 {
+            color: var(--dark);
+            font-size: 1.4rem;
+            margin-top: 0;
+        }
+
+        .user-info-card {
+            background: var(--light);
+            border: 1px solid #e9ecef;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-radius: 50px;
+            margin-top: 10px;
+        }
+
+        .badge-locked {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        .badge-unlocked {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .section-box {
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .section-box.disabled {
+            opacity: 0.6;
+            pointer-events: none;
+            background-color: #e9ecef;
+        }
+
+        .question-card {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+        }
+
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .options label {
+            display: block;
+            padding: 10px 14px;
+            margin-bottom: 6px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .options label:hover {
+            background: #e9ecef;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        button.btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button.btn:hover {
+            background-color: #004085;
+        }
+
+        button.btn:disabled {
+            background-color: var(--gray);
+            cursor: not-allowed;
+        }
+
+        .results-box {
+            display: none;
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+
+        .rationale-card {
+            background: #fff;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .rationale-card.correct {
+            border-left-color: var(--secondary);
+        }
+
+        .rationale-card.incorrect {
+            border-left-color: var(--danger);
+        }
+
+        .rationale-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .rationale-text {
+            font-size: 0.95rem;
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Patient Safety & Clinical Communication Certification Exam</h1>
+        <p><strong>Module:</strong> Nursing Care Plan Terminologies, Tenses & Clinical Voice Structure</p>
+    </header>
+
+    <!-- User Information Panel -->
+    <div class="user-info-card">
+        <h2>Test-Taker Registration</h2>
+        <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" placeholder="Enter your full name">
+        </div>
+        <div class="form-group">
+            <label for="takerID">Test-Taker ID</label>
+            <input type="text" id="takerID" placeholder="e.g. NURSE-2026-8891">
+        </div>
+        <div>
+            <strong>Post-Test Status:</strong>
+            <span id="lockBadge" class="status-badge badge-locked">🔒 LOCKED (Complete Pre-Test First)</span>
+        </div>
+    </div>
+
+    <!-- Pre-Test Section -->
+    <div id="preTestSection" class="section-box">
+        <h2>Section I: Diagnostic Pre-Test</h2>
+        <p><em>Complete all items to unlock the Post-Test and view performance summary.</em></p>
+        <form id="preTestForm">
+            <div id="preTestContainer"></div>
+            <button type="button" class="btn" onclick="submitPreTest()">Submit Pre-Test & Unlock Post-Test</button>
+        </form>
+        <div id="preTestResults" class="results-box"></div>
+    </div>
+
+    <!-- Post-Test Section (Inactive by default) -->
+    <div id="postTestSection" class="section-box disabled">
+        <h2>Section II: Comprehensive Post-Test & Clinical Rationales</h2>
+        <p><em>Passing Grade: 80% | Rationales will be rendered after test submission.</em></p>
+        <form id="postTestForm">
+            <div id="postTestContainer"></div>
+            <button type="button" class="btn" id="postTestBtn" onclick="submitPostTest()" disabled>Submit Final Exam</button>
+        </form>
+        <div id="postTestResults" class="results-box"></div>
+    </div>
+</div>
+
+<script>
+    // Master Question Pools with Randomized Answer Keys & Detailed Clinical Rationales
+    const rawPreTestQuestions = [
+        { 
+            text: 'Which statement represents a "Time-Independent Theoretical Abstraction / Physiological Law" (Simple Present)?', 
+            options: [
+                'The nurse is currently inspecting the central venous line site.', 
+                'Insulin facilitates glucose transport across cell membranes.', 
+                'The primary team has completed the multidisciplinary rounds.', 
+                'The patient will receive 2 units of packed red blood cells.'
+            ], 
+            answer: 1 
+        },
+        { 
+            text: 'Which statement represents an "Empirical Action in Progress" (Progressive Present)?', 
+            options: [
+                'Normal Saline infuses at 100 mL/hr daily for standard fluid replacement.', 
+                'Morphine sulfate 2 mg IV was administered at 14:00.', 
+                'The primary nurse is monitoring the arterial line for waveform dampening right now.', 
+                'The surgical team will examine the incision tomorrow morning.'
+            ], 
+            answer: 2 
+        },
+        { 
+            text: '"The patient has developed a sudden onset of acute dyspnea." What is the clinical focus of this Present Perfect tense?', 
+            options: [
+                'A historical condition that resolved prior to admission.', 
+                'A future projected event requiring potential physician notification.', 
+                'A routine daily physiological baseline.', 
+                'A past completed event whose clinical outcome directly impacts current intervention needs.'
+            ], 
+            answer: 3 
+        },
+        { 
+            text: 'In objective SBAR communication, which phrase demonstrates precise clinical documentation of an active physical state?', 
+            options: [
+                'Patient seems uncomfortable and acts tired.', 
+                'Client is demonstrating asymmetrical chest wall expansion during inspiration.', 
+                'Patient will probably need pain medication later.', 
+                'Client was admitted 3 days ago with abdominal pain.'
+            ], 
+            answer: 1 
+        }
+    ];
+
+    const rawPostTestQuestions = [
+        { 
+            text: 'A nurse charts: "The human heart pumps approximately 5 liters of blood per minute." This structure represents:', 
+            options: [
+                'Progressive Present (Empirical Action)', 
+                'Simple Present (Theoretical Abstraction / Physiological Law)', 
+                'Perfect Present (Completed Status)', 
+                'Simple Future (Projection)'
+            ], 
+            answer: 1,
+            rationale: 'Simple Present tense is used to document general physiological facts, medical principles, and established scientific abstractions that remain constant over time.'
+        },
+        { 
+            text: 'At 10:15, a nurse notes: "The client is currently displaying facial grimacing and guarding of the right lower quadrant." This represents:', 
+            options: [
+                'Simple Present (General Habit)', 
+                'Perfect Present (Past completed action)', 
+                'Progressive Present (Real-time physical observation in progress)', 
+                'Past Future (Hypothetical outcome)'
+            ], 
+            answer: 2,
+            rationale: 'The Progressive Present ("is displaying") indicates a real-time, empirical clinical observation occurring at the moment of assessment.'
+        },
+        { 
+            text: 'A nurse reports: "The patient has received 1,000 mL of Normal Saline intravenous fluid." What is the clinical emphasis of using the Present Perfect structure here?', 
+            options: [
+                'An action scheduled for the upcoming shift.', 
+                'A general statement of routine hospital policy.', 
+                'An ongoing continuous process with no end point.', 
+                'A completed intervention whose result (fluid load) directly governs the current fluid balance status.'
+            ], 
+            answer: 3,
+            rationale: 'Present Perfect ("has received") links a completed past intervention to current clinical decision-making (e.g., re-evaluating volume status).'
+        },
+        { 
+            text: 'Which sentence correctly utilizes the passive voice to maintain focus on patient safety and intervention rather than the administrator?', 
+            options: [
+                'Nurse Sarah administered 50 mcg of Fentanyl at 08:00.', 
+                'Fifty micrograms of Fentanyl was administered IV push at 08:00.', 
+                'The doctor ordered Fentanyl for post-operative pain.', 
+                'The unit clerk logged the order into the computer system.'
+            ], 
+            answer: 1,
+            rationale: 'Passive voice ("was administered") is frequently prioritized in formal nursing documentation to emphasize the patient, intervention, and dose over the identity of the performer.'
+        }
+    ];
+
+    // Helper Function to Fisher-Yates Shuffle Options while maintaining correct Answer tracking
+    function shuffleOptions(questionPool) {
+        return questionPool.map(item => {
+            const optionsWithIndex = item.options.map((opt, origIdx) => ({
+                text: opt,
+                isCorrect: origIdx === item.answer
+            }));
+
+            // Shuffle
+            for (let i = optionsWithIndex.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
+            }
+
+            const newAnswerIndex = optionsWithIndex.findIndex(o => o.isCorrect);
+            const newOptions = optionsWithIndex.map(o => o.text);
+
+            return {
+                ...item,
+                options: newOptions,
+                answer: newAnswerIndex
+            };
+        });
+    }
+
+    // Process and shuffle options
+    const preTestQuestions = shuffleOptions(rawPreTestQuestions);
+    const postTestQuestions = shuffleOptions(rawPostTestQuestions);
+
+    function renderQuestions(questions, containerId, prefix) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = questions.map((q, index) => `
+            <div class="question-card" id="${prefix}_card_${index}">
+                <div class="question-title">${index + 1}. ${q.text}</div>
+                <div class="options">
+                    ${q.options.map((opt, i) => `
+                        <label>
+                            <input type="radio" name="${prefix}_q${index}" value="${i}">
+                            ${opt}
+                        </label>
+                    `).join('')}
+                </div>
+                <div id="${prefix}_rationale_${index}"></div>
+            </div>
+        `).join('');
+    }
+
+    // Initialize Questions
+    renderQuestions(preTestQuestions, 'preTestContainer', 'pre');
+    renderQuestions(postTestQuestions, 'postTestContainer', 'post');
+
+    function submitPreTest() {
+        const name = document.getElementById('fullName').value;
+        const id = document.getElementById('takerID').value;
+
+        if (!name || !id) {
+            alert('Please fill out your Name and Test-Taker ID before submitting.');
+            return;
+        }
+
+        let score = 0;
+        preTestQuestions.forEach((q, index) => {
+            const selected = document.querySelector(`input[name="pre_q${index}"]:checked`);
+            if (selected && parseInt(selected.value) === q.answer) {
+                score++;
+            }
+        });
+
+        const resultsBox = document.getElementById('preTestResults');
+        resultsBox.style.display = 'block';
+        resultsBox.innerHTML = `<strong>Diagnostic Pre-Test Submitted!</strong><br>Test-Taker: ${name} (${id})<br>Score: ${score} / ${preTestQuestions.length}`;
+
+        // Unlock Post-Test
+        document.getElementById('postTestSection').classList.remove('disabled');
+        document.getElementById('postTestBtn').disabled = false;
+        
+        const badge = document.getElementById('lockBadge');
+        badge.className = 'status-badge badge-unlocked';
+        badge.innerText = '🔓 UNLOCKED (Post-Test Active)';
+
+        document.getElementById('postTestSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function submitPostTest() {
+        let score = 0;
+
+        postTestQuestions.forEach((q, index) => {
+            const selected = document.querySelector(`input[name="post_q${index}"]:checked`);
+            const userAns = selected ? parseInt(selected.value) : -1;
+            const isCorrect = userAns === q.answer;
+
+            if (isCorrect) score++;
+
+            // Render Rationale Box below the question after finishing
+            const rationaleContainer = document.getElementById(`post_rationale_${index}`);
+            const correctOptText = q.options[q.answer];
+
+            rationaleContainer.innerHTML = `
+                <div class="rationale-card ${isCorrect ? 'correct' : 'incorrect'}">
+                    <div class="rationale-title">${isCorrect ? '✅ Correct' : '❌ Incorrect'}</div>
+                    <div class="rationale-text">
+                        <strong>Correct Answer:</strong> ${correctOptText}<br>
+                        <strong>Clinical Rationale:</strong> ${q.rationale}
+                    </div>
+                </div>
+            `;
+        });
+
+        // Disable form inputs after submission
+        const inputs = document.querySelectorAll('#postTestForm input[type="radio"]');
+        inputs.forEach(input => input.disabled = true);
+        document.getElementById('postTestBtn').disabled = true;
+
+        // Display Score & Summary
+        const resultsBox = document.getElementById('postTestResults');
+        const percentage = Math.round((score / postTestQuestions.length) * 100);
+        resultsBox.style.display = 'block';
+        resultsBox.innerHTML = `
+            <h2>Final Exam Results</h2>
+            <p><strong>Score:</strong> ${score} / ${postTestQuestions.length} (${percentage}%)</p>
+            <p><strong>Status:</strong> ${percentage >= 80 ? '<span style="color:var(--secondary);font-weight:bold;">PASSED</span>' : '<span style="color:var(--danger);font-weight:bold;">RE-EXAMINATION REQUIRED</span>'}</p>
+            <p><em>Review the clinical rationales displayed beneath each question above.</em></p>
+        `;
+
+        resultsBox.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
