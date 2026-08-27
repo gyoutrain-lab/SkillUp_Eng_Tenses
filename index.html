@@ -1,471 +1,843 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clinical Communication & Tenses Exam Portal</title>
+    <title>Sistem Presensi & Teaching-Learning Journal - BP3MI Aceh</title>
     <style>
         :root {
-            --primary: #0056b3;
-            --secondary: #28a745;
-            --danger: #dc3545;
-            --light: #f8f9fa;
-            --dark: #343a40;
-            --gray: #6c757d;
+            --primary-color: #1e3a8a;
+            --secondary-color: #0d9488;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #cbd5e1;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f4f6f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
-            padding: 20px;
+            padding: 15px;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1250px;
             margin: 0 auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        header {
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-
-        h1 {
-            color: var(--primary);
-            font-size: 1.8rem;
-            margin: 0 0 10px 0;
-        }
-
-        h2 {
-            color: var(--dark);
-            font-size: 1.4rem;
-            margin-top: 0;
-        }
-
-        .user-info-card {
-            background: var(--light);
-            border: 1px solid #e9ecef;
+        .locked-header {
+            background: linear-gradient(135deg, var(--primary-color), #1d4ed8);
+            color: white;
             padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .locked-header h2 {
+            margin: 0 0 8px 0;
+            font-size: 1.15rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 8px;
+            color: white !important;
+        }
+
+        .header-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            font-size: 0.88rem;
+        }
+
+        .mode-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: #e2e8f0;
+            border: none;
+            padding: 8px 16px;
             border-radius: 6px;
-            margin-bottom: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
             font-weight: bold;
+            cursor: pointer;
+            color: var(--text-color);
+            font-size: 0.85rem;
         }
 
-        .form-group input {
+        .nav-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active-view {
+            display: block;
+        }
+
+        .session-control-box {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .control-group input, .control-group select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ced4da;
+            padding: 8px;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
+            font-size: 0.88rem;
+        }
+
+        .journal-feeder-box {
+            background: #f0fdf4;
+            border: 2px dashed #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .journal-feeder-box h4 {
+            margin: 0 0 10px 0;
+            color: #047857;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .journal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .journal-group label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: bold;
+            color: #065f46;
+            margin-bottom: 3px;
+        }
+
+        .journal-group textarea, .journal-group input {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #a7f3d0;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            background: #ffffff;
             box-sizing: border-box;
         }
 
-        .status-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            border-radius: 50px;
+        .journal-group textarea {
+            resize: vertical;
+            height: 55px;
+        }
+
+        h3 {
+            color: var(--primary-color);
+            margin-top: 15px;
+            margin-bottom: 12px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 6px;
+            font-size: 1.05rem;
+        }
+
+        .presence-table {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 10px;
+            font-size: 0.88rem;
+            background: white;
         }
 
-        .badge-locked {
-            background-color: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeeba;
+        .presence-table th, .presence-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            vertical-align: middle;
         }
 
-        .badge-unlocked {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+        .presence-table th {
+            background-color: #f1f5f9;
+            color: var(--primary-color);
+            text-align: center;
         }
 
-        .section-box {
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-
-        .section-box.disabled {
-            opacity: 0.6;
-            pointer-events: none;
-            background-color: #e9ecef;
-        }
-
-        .question-card {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .question-card:last-child {
-            border-bottom: none;
-        }
-
-        .question-title {
+        .student-number {
+            text-align: center;
             font-weight: bold;
-            margin-bottom: 10px;
+            width: 40px;
         }
 
-        .options label {
-            display: block;
-            padding: 10px 14px;
-            margin-bottom: 6px;
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+        .student-name {
+            font-weight: 600;
+            width: 180px;
+        }
+
+        .checkbox-center {
+            text-align: center;
+            width: 80px;
+        }
+
+        .attendance-checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--secondary-color);
             cursor: pointer;
-            transition: background 0.2s;
         }
 
-        .options label:hover {
-            background: #e9ecef;
+        .sig-cell {
+            text-align: center;
+            width: 220px;
         }
 
-        .options input[type="radio"] {
-            margin-right: 10px;
+        .individual-canvas {
+            border: 1px dashed #94a3b8;
+            background: #fafafa;
+            cursor: crosshair;
+            display: block;
+            margin: 0 auto;
+            width: 200px;
+            height: 70px;
+            border-radius: 4px;
+            touch-action: none;
         }
 
-        button.btn {
-            background-color: var(--primary);
+        .sig-preview-img {
+            max-width: 180px;
+            max-height: 60px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .sig-btn-row {
+            margin-top: 4px;
+            font-size: 0.75rem;
+        }
+
+        .btn-clear-mini {
+            background: #ef4444;
             color: white;
             border: none;
-            padding: 12px 24px;
-            font-size: 1rem;
-            border-radius: 4px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-export {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.95rem;
             cursor: pointer;
             font-weight: bold;
         }
 
-        button.btn:hover {
-            background-color: #004085;
+        .btn-export:hover {
+            background-color: #0f766e;
         }
 
-        button.btn:disabled {
-            background-color: var(--gray);
-            cursor: not-allowed;
-        }
-
-        .results-box {
-            display: none;
-            background: #e9ecef;
-            padding: 20px;
+        .btn-review-print {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 14px;
             border-radius: 6px;
-            margin-top: 20px;
-        }
-
-        .rationale-card {
-            background: #fff;
-            border-left: 4px solid var(--primary);
-            padding: 15px;
-            margin-top: 15px;
-            border-radius: 0 4px 4px 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .rationale-card.correct {
-            border-left-color: var(--secondary);
-        }
-
-        .rationale-card.incorrect {
-            border-left-color: var(--danger);
-        }
-
-        .rationale-title {
+            font-size: 0.8rem;
+            cursor: pointer;
             font-weight: bold;
-            margin-bottom: 5px;
         }
 
-        .rationale-text {
-            font-size: 0.95rem;
-            color: #495057;
+        .alert-box {
+            background: #fffbeb;
+            border: 1px solid #fcd34d;
+            color: #92400e;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .print-journal-card {
+            background: #f8fafc;
+            border-left: 4px solid var(--primary-color);
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; padding: 0; }
+            .mode-nav, .session-control-box, .journal-feeder-box, .actions, .btn-clear-mini, .btn-review-print { display: none !important; }
+            .locked-header { -webkit-print-color-adjust: exact; background: #1e3a8a !important; }
+            .individual-canvas { border: 1px solid #000 !important; }
+            .view-section { display: block !important; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <header>
-        <h1>Patient Safety & Clinical Communication Certification Exam</h1>
-        <p><strong>Module:</strong> Nursing Care Plan Terminologies, Tenses & Clinical Voice Structure</p>
-    </header>
-
-    <!-- User Information Panel -->
-    <div class="user-info-card">
-        <h2>Test-Taker Registration</h2>
-        <div class="form-group">
-            <label for="fullName">Full Name</label>
-            <input type="text" id="fullName" placeholder="Enter your full name">
-        </div>
-        <div class="form-group">
-            <label for="takerID">Test-Taker ID</label>
-            <input type="text" id="takerID" placeholder="e.g. NURSE-2026-8891">
-        </div>
-        <div>
-            <strong>Post-Test Status:</strong>
-            <span id="lockBadge" class="status-badge badge-locked">🔒 LOCKED (Complete Pre-Test First)</span>
+    <div class="locked-header">
+        <h2>BP3MI Aceh & Program Peningkatan Kapasitas Calon Pekerja Migran</h2>
+        <div class="header-grid">
+            <div><strong>Program:</strong> Peningkatan Kapasitas Calon Pekerja Migran Program SMK Go Global</div>
+            <div><strong>Instruktur:</strong> <span id="displayInstructor">Giyono Asfarrasyid</span></div>
+            <div><strong>Standar Harian:</strong> 08:00 - Selesai (8 JPL / Hari @ 45 Menit)</div>
         </div>
     </div>
 
-    <!-- Pre-Test Section -->
-    <div id="preTestSection" class="section-box">
-        <h2>Section I: Diagnostic Pre-Test</h2>
-        <p><em>Complete all items to unlock the Post-Test and view performance summary.</em></p>
-        <form id="preTestForm">
-            <div id="preTestContainer"></div>
-            <button type="button" class="btn" onclick="submitPreTest()">Submit Pre-Test & Unlock Post-Test</button>
-        </form>
-        <div id="preTestResults" class="results-box"></div>
+    <!-- NAVIGASI MODE -->
+    <div class="mode-nav">
+        <button class="nav-btn active" id="btnLive" onclick="switchView('live')">🔴 Live Landing Page & Journal</button>
+        <button class="nav-btn" id="btnWeekly" onclick="switchView('weekly')">📅 Weekly Report + Journal</button>
+        <button class="nav-btn" id="btnMonthly" onclick="switchView('monthly')">📊 Monthly Report + Journal</button>
     </div>
 
-    <!-- Post-Test Section (Inactive by default) -->
-    <div id="postTestSection" class="section-box disabled">
-        <h2>Section II: Comprehensive Post-Test & Clinical Rationales</h2>
-        <p><em>Passing Grade: 80% | Rationales will be rendered after test submission.</em></p>
-        <form id="postTestForm">
-            <div id="postTestContainer"></div>
-            <button type="button" class="btn" id="postTestBtn" onclick="submitPostTest()" disabled>Submit Final Exam</button>
-        </form>
-        <div id="postTestResults" class="results-box"></div>
+    <!-- VIEW 1: LIVE HARI INI -->
+    <div id="viewLive" class="view-section active-view">
+        <div class="alert-box" id="lockStatusMsg">
+            <span>🔒 <strong>Sistem Terintegrasi:</strong> Lengkapi Teaching-Learning Journal & Presensi harian (8 JPL).</span>
+            <button class="btn-review-print" onclick="switchView('weekly')">🔍 Review Print-Out Hari Ini</button>
+        </div>
+
+        <div class="session-control-box">
+            <div class="control-group">
+                <label>Tanggal Otomatis (System Clock):</label>
+                <input type="date" id="liveDate" readonly style="background:#e2e8f0; font-weight:bold; cursor:not-allowed;">
+            </div>
+            <div class="control-group">
+                <label>Sub-Materi / Kompetensi Aktif (Auto-Switch):</label>
+                <select id="liveSector" onchange="updateSectorDetails()"></select>
+            </div>
+            <div class="control-group">
+                <label>Alokasi Harian (8 JPL / 360 Menit):</label>
+                <input type="text" id="activeSectorInfo" value="08:00 - Selesai (8 JPL dialokasikan)" readonly style="background:#e2e8f0; font-weight:bold;">
+            </div>
+        </div>
+
+        <!-- FEEDER TEACHING-LEARNING JOURNAL -->
+        <div class="journal-feeder-box">
+            <h4>
+                <span>📖 Feeder: Teaching-Learning Journal (Input Trainer Harian)</span>
+                <span style="font-size: 0.75rem; font-weight: normal; color: #047857;">Sesuai Alokasi 8 JPL</span>
+            </h4>
+            <div class="journal-grid">
+                <div class="journal-group">
+                    <label>Materi Pokok / Sub-Topik Pembelajaran Hari Ini:</label>
+                    <input type="text" id="jnlTopic" placeholder="Contoh: Praktik Klinis Prosedur Keperawatan & Terminologi Medis...">
+                </div>
+                <div class="journal-group">
+                    <label>Metode & Strategi Penyampaian Trainer:</label>
+                    <input type="text" id="jnlMethod" placeholder="Contoh: Simulasi Bedah Kasus, Diskusi Interaktif & Drill 21x...">
+                </div>
+                <div class="journal-group">
+                    <label>Kendala / Hambatan Kelas (Jika Ada):</label>
+                    <textarea id="jnlObstacle" placeholder="Catat hambatan pemahaman peserta atau teknis kelas..."></textarea>
+                </div>
+                <div class="journal-group">
+                    <label>Catatan Evaluasi / Tindak Lanjut Besok:</label>
+                    <textarea id="jnlEvaluation" placeholder="Catat progress penyerapan target kompetensi..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <h3 id="liveTitle">Presensi & Tanda Tangan Mandiri Harian (08.00 WIB)</h3>
+
+        <table class="presence-table">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Peserta Perawat</th>
+                    <th class="checkbox-center">Hadir (✔)</th>
+                    <th>Tanda Tangan Live (Sesi Ini)</th>
+                </tr>
+            </thead>
+            <tbody id="liveRosterBody"></tbody>
+        </table>
+
+        <div class="actions">
+            <span style="font-size: 0.85rem; color: #166534; font-weight: bold;" id="liveMsg"></span>
+            <button class="btn-export" id="btnSaveRecord" onclick="saveAndRecordSession()">💾 Simpan Jurnal & Presensi (Potong 8 JPL)</button>
+        </div>
+    </div>
+
+    <!-- VIEW 2: WEEKLY REPORT -->
+    <div id="viewWeekly" class="view-section">
+        <h3>📅 Weekly Report & Teaching Journal (Rekapitulasi Mingguan)</h3>
+        <p style="font-size: 0.88rem; color: #64748b;">Arsip review laporan harian & mingguan yang siap dicetak.</p>
+        
+        <div id="weeklyJournalContainer" style="margin-bottom: 25px;"></div>
+
+        <table class="presence-table" style="margin-top: 15px;">
+            <thead>
+                <tr>
+                    <th>Tanggal & Sub-Materi Kurikulum</th>
+                    <th>Nama Peserta Perawat</th>
+                    <th class="checkbox-center">Kehadiran</th>
+                    <th>Bukti Tanda Tangan Digital</th>
+                </tr>
+            </thead>
+            <tbody id="weeklyRosterBody"></tbody>
+        </table>
+
+        <div class="actions">
+            <span></span>
+            <button class="btn-export" onclick="window.print()">🖨️ Cetak Weekly Report & Journal</button>
+        </div>
+    </div>
+
+    <!-- VIEW 3: MONTHLY REPORT -->
+    <div id="viewMonthly" class="view-section">
+        <h3>📊 Monthly Report & Teaching Journal (Rekapitulasi Bulanan)</h3>
+        <p style="font-size: 0.88rem; color: #64748b;">Arsip lengkap seluruh jurnal mengajar trainer dan daftar hadir peserta dalam periode bulanan.</p>
+
+        <div id="monthlyJournalContainer" style="margin-bottom: 25px;"></div>
+
+        <table class="presence-table" style="margin-top: 15px;">
+            <thead>
+                <tr>
+                    <th>Tanggal & Sub-Materi Kurikulum</th>
+                    <th>Nama Peserta Perawat</th>
+                    <th class="checkbox-center">Kehadiran</th>
+                    <th>Bukti Tanda Tangan Digital</th>
+                </tr>
+            </thead>
+            <tbody id="monthlyRosterBody"></tbody>
+        </table>
+
+        <div class="actions">
+            <span></span>
+            <button class="btn-export" onclick="window.print()">🖨️ Cetak Monthly Report & Journal</button>
+        </div>
     </div>
 </div>
 
 <script>
-    // Master Question Pools with Randomized Answer Keys & Detailed Clinical Rationales
-    const rawPreTestQuestions = [
-        { 
-            text: 'Which statement represents a "Time-Independent Theoretical Abstraction / Physiological Law" (Simple Present)?', 
-            options: [
-                'The nurse is currently inspecting the central venous line site.', 
-                'Insulin facilitates glucose transport across cell membranes.', 
-                'The primary team has completed the multidisciplinary rounds.', 
-                'The patient will receive 2 units of packed red blood cells.'
-            ], 
-            answer: 1 
-        },
-        { 
-            text: 'Which statement represents an "Empirical Action in Progress" (Progressive Present)?', 
-            options: [
-                'Normal Saline infuses at 100 mL/hr daily for standard fluid replacement.', 
-                'Morphine sulfate 2 mg IV was administered at 14:00.', 
-                'The primary nurse is monitoring the arterial line for waveform dampening right now.', 
-                'The surgical team will examine the incision tomorrow morning.'
-            ], 
-            answer: 2 
-        },
-        { 
-            text: '"The patient has developed a sudden onset of acute dyspnea." What is the clinical focus of this Present Perfect tense?', 
-            options: [
-                'A historical condition that resolved prior to admission.', 
-                'A future projected event requiring potential physician notification.', 
-                'A routine daily physiological baseline.', 
-                'A past completed event whose clinical outcome directly impacts current intervention needs.'
-            ], 
-            answer: 3 
-        },
-        { 
-            text: 'In objective SBAR communication, which phrase demonstrates precise clinical documentation of an active physical state?', 
-            options: [
-                'Patient seems uncomfortable and acts tired.', 
-                'Client is demonstrating asymmetrical chest wall expansion during inspiration.', 
-                'Patient will probably need pain medication later.', 
-                'Client was admitted 3 days ago with abdominal pain.'
-            ], 
-            answer: 1 
-        }
+    // Daftar Peserta Sesuai Urutan Lembar Kerja Terbaru
+    const students = [
+        "Putri Intan Ridayana", 
+        "Elya Susanti", 
+        "Maulidar", 
+        "Anis Sagita", 
+        "Intan Susrika", 
+        "Delvira Milda", 
+        "Safira Kemala Putri", 
+        "Rahmatillah", 
+        "Rizki Febriwanti", 
+        "Sarah Salsa Fitri", 
+        "Mirdha Rosalinda", 
+        "Fezdriani", 
+        "Miftahul Hasanah", 
+        "Qhotorun Nada Sari", 
+        "Maisarah", 
+        "Nadaria", 
+        "Irmanda Putri Safira", 
+        "Ayu Anggira Effendi", 
+        "Nadia Vonna", 
+        "Fitriani"
     ];
 
-    const rawPostTestQuestions = [
-        { 
-            text: 'A nurse charts: "The human heart pumps approximately 5 liters of blood per minute." This structure represents:', 
-            options: [
-                'Progressive Present (Empirical Action)', 
-                'Simple Present (Theoretical Abstraction / Physiological Law)', 
-                'Perfect Present (Completed Status)', 
-                'Simple Future (Projection)'
-            ], 
-            answer: 1,
-            rationale: 'Simple Present tense is used to document general physiological facts, medical principles, and established scientific abstractions that remain constant over time.'
-        },
-        { 
-            text: 'At 10:15, a nurse notes: "The client is currently displaying facial grimacing and guarding of the right lower quadrant." This represents:', 
-            options: [
-                'Simple Present (General Habit)', 
-                'Perfect Present (Past completed action)', 
-                'Progressive Present (Real-time physical observation in progress)', 
-                'Past Future (Hypothetical outcome)'
-            ], 
-            answer: 2,
-            rationale: 'The Progressive Present ("is displaying") indicates a real-time, empirical clinical observation occurring at the moment of assessment.'
-        },
-        { 
-            text: 'A nurse reports: "The patient has received 1,000 mL of Normal Saline intravenous fluid." What is the clinical emphasis of using the Present Perfect structure here?', 
-            options: [
-                'An action scheduled for the upcoming shift.', 
-                'A general statement of routine hospital policy.', 
-                'An ongoing continuous process with no end point.', 
-                'A completed intervention whose result (fluid load) directly governs the current fluid balance status.'
-            ], 
-            answer: 3,
-            rationale: 'Present Perfect ("has received") links a completed past intervention to current clinical decision-making (e.g., re-evaluating volume status).'
-        },
-        { 
-            text: 'Which sentence correctly utilizes the passive voice to maintain focus on patient safety and intervention rather than the administrator?', 
-            options: [
-                'Nurse Sarah administered 50 mcg of Fentanyl at 08:00.', 
-                'Fifty micrograms of Fentanyl was administered IV push at 08:00.', 
-                'The doctor ordered Fentanyl for post-operative pain.', 
-                'The unit clerk logged the order into the computer system.'
-            ], 
-            answer: 1,
-            rationale: 'Passive voice ("was administered") is frequently prioritized in formal nursing documentation to emphasize the patient, intervention, and dose over the identity of the performer.'
-        }
+    // Master Kurikulum dengan Sektor 4.1, 4.2, 4.3 Terintegrasi Penuh
+    const sectorsMaster = [
+        { id: "eng_pattern", name: "1.1 English Basic Pattern", totalJpl: 15 },
+        { id: "eng_pos", name: "1.2 English Parts of Speech", totalJpl: 10 },
+        { id: "eng_tenses", name: "1.3 English Tenses", totalJpl: 45 },
+        { id: "eng_sentences", name: "1.4 English Sentences", totalJpl: 50 },
+        { id: "eng_vocab", name: "1.5 Vocabulary Building", totalJpl: 40 },
+        { id: "prom_intro", name: "2.1 Introduction to Prometric Test", totalJpl: 20 },
+        { id: "prom_compare", name: "2.2 SCFHS vs STR & NCLEX", totalJpl: 10 },
+        { id: "prom_facts", name: "2.3 SCFHS Facts", totalJpl: 20 },
+        { id: "prom_tech", name: "2.4 Practice Simulation: Nurse Technician", totalJpl: 40 },
+        { id: "prom_spec", name: "2.5 Practice Simulation: Nurse Specialist", totalJpl: 30 },
+        { id: "job_rationale", name: "3.1 Job Interview Rationale", totalJpl: 10 },
+        { id: "job_str", name: "3.2 Behavioral STR Technique", totalJpl: 20 },
+        { id: "job_selfintro", name: "3.3 Self Introduction", totalJpl: 25 },
+        { id: "job_cases", name: "3.4 Most Cases & How To", totalJpl: 25 },
+        { id: "job_sim", name: "3.5 Practice Job Interview Simulation", totalJpl: 20 },
+        { id: "nurs_sop", name: "4.1 Nursing Care Standard Procedure", totalJpl: 10 },
+        { id: "nurs_daily", name: "4.2 Daily Life as a Nurse", totalJpl: 10 },
+        { id: "nurs_treat", name: "4.3 How to Practice Clinical Treatment", totalJpl: 60 },
+        { id: 5, name: "5. Ethics & Workplace Adaptation", totalJpl: 50 },
+        { id: 6, name: "6. Global Mobility & Legal Compliance", totalJpl: 50 },
+        { id: 7, name: "7. Daily Life Integration", totalJpl: 40 },
+        { id: 8, name: "8. Certification / Portfolio", totalJpl: 20 },
+        { id: 9, name: "9. Integrated Simulation & Final Assessment", totalJpl: 20 }
     ];
 
-    // Helper Function to Fisher-Yates Shuffle Options while maintaining correct Answer tracking
-    function shuffleOptions(questionPool) {
-        return questionPool.map(item => {
-            const optionsWithIndex = item.options.map((opt, origIdx) => ({
-                text: opt,
-                isCorrect: origIdx === item.answer
-            }));
+    let activeContexts = {};
+    let recordedSessions = JSON.parse(localStorage.getItem('bp3mi_attendance_logs_v14') || '{}');
+    const todayStr = new Date().toISOString().split('T')[0];
 
-            // Shuffle
-            for (let i = optionsWithIndex.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
+    function getInstructorForSector(sectorId) {
+        if (sectorId === "nurs_sop" || sectorId === "nurs_daily" || sectorId === "nurs_treat") {
+            return "Rizkia Fanna";
+        }
+        return "Giyono Asfarrasyid";
+    }
+
+    function switchView(mode) {
+        document.getElementById('viewLive').classList.remove('active-view');
+        document.getElementById('viewWeekly').classList.remove('active-view');
+        document.getElementById('viewMonthly').classList.remove('active-view');
+        document.getElementById('btnLive').classList.remove('active');
+        document.getElementById('btnWeekly').classList.remove('active');
+        document.getElementById('btnMonthly').classList.remove('active');
+
+        if(mode === 'live') {
+            document.getElementById('viewLive').classList.add('active-view');
+            document.getElementById('btnLive').classList.add('active');
+            buildLiveRoster();
+        } else if(mode === 'weekly') {
+            document.getElementById('viewWeekly').classList.add('active-view');
+            document.getElementById('btnWeekly').classList.add('active');
+            renderReportData('weeklyRosterBody', 'weeklyJournalContainer');
+        } else {
+            document.getElementById('viewMonthly').classList.add('active-view');
+            document.getElementById('btnMonthly').classList.add('active');
+            renderReportData('monthlyRosterBody', 'monthlyJournalContainer');
+        }
+    }
+
+    function getSectorRemainingJpl(sectorId) {
+        let usedJpl = 0;
+        Object.keys(recordedSessions).forEach(key => {
+            if(key.includes(`Sub_${sectorId}`)) {
+                usedJpl += 8;
+            }
+        });
+        const sector = sectorsMaster.find(s => s.id === sectorId);
+        return Math.max(0, sector.totalJpl - usedJpl);
+    }
+
+    function populateSectorDropdown() {
+        const select = document.getElementById('liveSector');
+        if(!select) return;
+        select.innerHTML = "";
+        let autoSelectedId = null;
+
+        sectorsMaster.forEach(sec => {
+            const remaining = getSectorRemainingJpl(sec.id);
+            const isCompleted = remaining === 0;
+            const opt = document.createElement('option');
+            opt.value = sec.id;
+            opt.text = `${sec.name} (${remaining}/${sec.totalJpl} Tersisa)` + (isCompleted ? " [ LUNAS / SELESAI ]" : "");
+            
+            if(isCompleted) {
+                opt.disabled = true;
+            } else if(!autoSelectedId) {
+                autoSelectedId = sec.id;
+            }
+            select.appendChild(opt);
+        });
+
+        if(autoSelectedId) {
+            select.value = autoSelectedId;
+        }
+        updateSectorDetails();
+    }
+
+    function updateSectorDetails() {
+        const select = document.getElementById('liveSector');
+        const infoInput = document.getElementById('activeSectorInfo');
+        const displayInst = document.getElementById('displayInstructor');
+        if(!select || !infoInput) return;
+        
+        const val = select.value;
+        const remaining = getSectorRemainingJpl(val);
+        const currentInst = getInstructorForSector(val);
+
+        if(displayInst) {
+            displayInst.innerText = currentInst;
+        }
+        
+        if(remaining > 0) {
+            infoInput.value = `08:00 - Selesai (Alokasi 8 JPL / Sisa: ${remaining} JPL)`;
+        } else {
+            infoInput.value = `Modul Ini Telah Selesai (0 JPL)`;
+        }
+    }
+
+    function buildLiveRoster() {
+        const dateInput = document.getElementById('liveDate');
+        if(dateInput) dateInput.value = todayStr;
+        
+        populateSectorDropdown();
+
+        const selectSec = document.getElementById('liveSector');
+        const sectorVal = selectSec ? selectSec.value : "eng_pattern";
+        const key = `${todayStr}_Sub_${sectorVal}`;
+        const existingData = recordedSessions[key];
+
+        const tbody = document.getElementById('liveRosterBody');
+        const saveBtn = document.getElementById('btnSaveRecord');
+        const lockMsg = document.getElementById('lockStatusMsg');
+        if(!tbody) return;
+        tbody.innerHTML = "";
+
+        if(existingData) {
+            if(saveBtn) saveBtn.style.display = 'none';
+            if(lockMsg) {
+                lockMsg.innerHTML = `<span>🔒 <strong>Sesi Hari Ini Sudah Dikunci:</strong> Presensi & Jurnal tanggal ${todayStr} untuk modul ini telah tersimpan permanen.</span> <button class="btn-review-print" onclick="switchView('weekly')">🔍 Review Print-Out Hari Ini</button>`;
             }
 
-            const newAnswerIndex = optionsWithIndex.findIndex(o => o.isCorrect);
-            const newOptions = optionsWithIndex.map(o => o.text);
+            if(existingData.journal) {
+                document.getElementById('jnlTopic').value = existingData.journal.topic || '';
+                document.getElementById('jnlMethod').value = existingData.journal.method || '';
+                document.getElementById('jnlObstacle').value = existingData.journal.obstacle || '';
+                document.getElementById('jnlEvaluation').value = existingData.journal.evaluation || '';
+            }
 
-            return {
-                ...item,
-                options: newOptions,
-                answer: newAnswerIndex
-            };
-        });
-    }
-
-    // Process and shuffle options
-    const preTestQuestions = shuffleOptions(rawPreTestQuestions);
-    const postTestQuestions = shuffleOptions(rawPostTestQuestions);
-
-    function renderQuestions(questions, containerId, prefix) {
-        const container = document.getElementById(containerId);
-        container.innerHTML = questions.map((q, index) => `
-            <div class="question-card" id="${prefix}_card_${index}">
-                <div class="question-title">${index + 1}. ${q.text}</div>
-                <div class="options">
-                    ${q.options.map((opt, i) => `
-                        <label>
-                            <input type="radio" name="${prefix}_q${index}" value="${i}">
-                            ${opt}
-                        </label>
-                    `).join('')}
-                </div>
-                <div id="${prefix}_rationale_${index}"></div>
-            </div>
-        `).join('');
-    }
-
-    // Initialize Questions
-    renderQuestions(preTestQuestions, 'preTestContainer', 'pre');
-    renderQuestions(postTestQuestions, 'postTestContainer', 'post');
-
-    function submitPreTest() {
-        const name = document.getElementById('fullName').value;
-        const id = document.getElementById('takerID').value;
-
-        if (!name || !id) {
-            alert('Please fill out your Name and Test-Taker ID before submitting.');
+            students.forEach((name, idx) => {
+                const log = existingData.students ? (existingData.students[idx] || {}) : {};
+                let row = `
+                    <tr>
+                        <td class="student-number">${idx + 1}</td>
+                        <td class="student-name">${name}</td>
+                        <td class="checkbox-center">${log.present ? '<span style="color:#166534; font-weight:bold;">Hadir (✔)</span>' : '<span style="color:#dc2626;">Tidak Hadir</span>'}</td>
+                        <td class="sig-cell">
+                            ${log.sig ? `<img src="${log.sig}" class="sig-preview-img">` : '<span style="color:#94a3b8; font-style:italic;">[ Kosong ]</span>'}
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
             return;
         }
 
-        let score = 0;
-        preTestQuestions.forEach((q, index) => {
-            const selected = document.querySelector(`input[name="pre_q${index}"]:checked`);
-            if (selected && parseInt(selected.value) === q.answer) {
-                score++;
-            }
-        });
+        if(saveBtn) saveBtn.style.display = 'inline-block';
+        if(lockMsg) {
+            lockMsg.innerHTML = `<span>🔒 <strong>Jadwal Normal Aktif (08.00 WIB):</strong> Isi Jurnal Mengajar dan Presensi harian (8 JPL).</span> <button class="btn-review-print" onclick="switchView('weekly')">🔍 Review Print-Out Hari Ini</button>`;
+        }
 
-        const resultsBox = document.getElementById('preTestResults');
-        resultsBox.style.display = 'block';
-        resultsBox.innerHTML = `<strong>Diagnostic Pre-Test Submitted!</strong><br>Test-Taker: ${name} (${id})<br>Score: ${score} / ${preTestQuestions.length}`;
+        document.getElementById('jnlTopic').value = '';
+        document.getElementById('jnlMethod').value = '';
+        document.getElementById('jnlObstacle').value = '';
+        document.getElementById('jnlEvaluation').value = '';
 
-        // Unlock Post-Test
-        document.getElementById('postTestSection').classList.remove('disabled');
-        document.getElementById('postTestBtn').disabled = false;
-        
-        const badge = document.getElementById('lockBadge');
-        badge.className = 'status-badge badge-unlocked';
-        badge.innerText = '🔓 UNLOCKED (Post-Test Active)';
-
-        document.getElementById('postTestSection').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function submitPostTest() {
-        let score = 0;
-
-        postTestQuestions.forEach((q, index) => {
-            const selected = document.querySelector(`input[name="post_q${index}"]:checked`);
-            const userAns = selected ? parseInt(selected.value) : -1;
-            const isCorrect = userAns === q.answer;
-
-            if (isCorrect) score++;
-
-            // Render Rationale Box below the question after finishing
-            const rationaleContainer = document.getElementById(`post_rationale_${index}`);
-            const correctOptText = q.options[q.answer];
-
-            rationaleContainer.innerHTML = `
-                <div class="rationale-card ${isCorrect ? 'correct' : 'incorrect'}">
-                    <div class="rationale-title">${isCorrect ? '✅ Correct' : '❌ Incorrect'}</div>
-                    <div class="rationale-text">
-                        <strong>Correct Answer:</strong> ${correctOptText}<br>
-                        <strong>Clinical Rationale:</strong> ${q.rationale}
-                    </div>
-                </div>
+        students.forEach((name, idx) => {
+            let row = `
+                <tr>
+                    <td class="student-number">${idx + 1}</td>
+                    <td class="student-name">${name}</td>
+                    <td class="checkbox-center">
+                        <input type="checkbox" class="attendance-checkbox" checked id="chk_${idx}">
+                    </td>
+                    <td class="sig-cell">
+                        <canvas id="canvas_${idx}" class="individual-canvas" style="display:block;"></canvas>
+                        <div class="sig-btn-row">
+                            <button type="button" class="btn-clear-mini" onclick="clearSig(${idx})">Hapus/Ulang</button>
+                        </div>
+                    </td>
+                </tr>
             `;
+            tbody.innerHTML += row;
         });
 
-        // Disable form inputs after submission
-        const inputs = document.querySelectorAll('#postTestForm input[type="radio"]');
-        inputs.forEach(input => input.disabled = true);
-        document.getElementById('postTestBtn').disabled = true;
-
-        // Display Score & Summary
-        const resultsBox = document.getElementById('postTestResults');
-        const percentage = Math.round((score / postTestQuestions.length) * 100);
-        resultsBox.style.display = 'block';
-        resultsBox.innerHTML = `
-            <h2>Final Exam Results</h2>
-            <p><strong>Score:</strong> ${score} / ${postTestQuestions.length} (${percentage}%)</p>
-            <p><strong>Status:</strong> ${percentage >= 80 ? '<span style="color:var(--secondary);font-weight:bold;">PASSED</span>' : '<span style="color:var(--danger);font-weight:bold;">RE-EXAMINATION REQUIRED</span>'}</p>
-            <p><em>Review the clinical rationales displayed beneath each question above.</em></p>
-        `;
-
-        resultsBox.scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => {
+            students.forEach((_, idx) => {
+                initCanvas(idx);
+            });
+        }, 100);
     }
+
+    function initCanvas(idx) {
+        const canvas = document.getElementById(`canvas_${idx}`);
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = 200;
+        canvas.height = 70;
+
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 1.5;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+
+        activeContexts[idx] = { canvas, ctx, isDrawing: false };
+
+        canvas.onmousedown = (e) => {
+            activeContexts[idx].isDrawing = true;
+            ctx.beginPath();
+            ctx.moveTo(e.offsetX, e.offsetY);
+        };
+        canvas.onmousemove = (e) => {
+            if (!activeContexts[idx].isDrawing) return;
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+        };
+        canvas.onmouseup = () => activeContexts[idx].isDrawing = false;
+        canvas.onmouseleave = () => activeContexts[idx].isDrawing = false;
+
+        canvas.ontouchstart = (e) => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            activeContexts[idx].isDrawing = true;
+            ctx.beginPath();
+            ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+        };
+        canvas.ontouchmove = (e) => {
+            e.preventDefault();
+            if (!activeContexts[idx].isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+            ctx.stroke();
+        };
+        canvas.ontouchend = () => activeContexts[idx].isDrawing = false;
+    }
+
+    function clearSig(idx) {
+        const canvas = document.getElementById(`canvas_${idx}`);
+        if (activeContexts[idx]) {
+            const { ctx } = activeContexts[idx];
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    }
+
+    function saveAndRecordSession() {
+        const selectSec = document.getElementById('liveSector');
+        if(!selectSec) return;
+        const sectorVal = selectSec.value;
+        const sectorObj = sectorsMaster.find(s => s.id == sectorVal);
+        const assignedInstructor = getInstructorForSector(sectorVal);
+        const key = `${todayStr}_Sub_${sectorVal}`;
+
+        const journalData = {
+            topic: document.getElementById('jnlTopic').value || 'Materi Harian Standar',
+            method: document.getElementById('jnlMethod').value || 'Tatap Muka & Praktik',
+            obstacle: document.getElementById('jnlObstacle').value || 'NIHIL',
+            evaluation: document.getElementById('jnlEvaluation').value || 'Target 8 JPL tercapai dengan baik'
+        };
+
+        let studentLogs = {};
+        students.forEach((name, idx) => {
+            const chk = document.getElementById(`chk_${idx}`);
+            const isPresent = chk ? chk.checked : true;
+            const canvas = document.getElementById(`canvas_${idx}`);
+            
+            let sigData = "";
+            if(canvas && activeContexts[idx]) {
+                sigData = canvas.toDataURL();
+            }
+
+            studentLogs[idx] = {
+                name: name,
+                present: isPresent,
+                sig: sigData
+            };
+        });
+
+        recordedSessions[key] = {
+            date: todayStr,
+            sectorInfo: `${sectorObj.name} (8 JPL)`,
+            instructor: assignedInstructor,
+            journal: journalData,
+            students: studentLogs
+        };
+
+        localStorage.setItem('bp3mi_attendance_logs_v14', JSON.stringify(recordedSessions));
+
+        const msgSpan = document.getElementById('liveMsg');
+        if(msgSpan) msgSpan.innerText = "✅ Jurnal & Presensi Tersimpan Permanent (8 JPL Dipotong)!";
+        setTimeout(() => { 
+            if(msgSpan) msgSpan.innerText = ""; 
+            switchView('weekly');
+        }, 1200);
+    }
+
+    function renderReportData(tableBodyId, journalContainerId) {
+        const tbody = document.getElementById(tableBodyId);
+        const jnlContainer = document.getElementById(journalContainerId);
+        if(!tbody || !jnlContainer) return;
+        
+        tbody.innerHTML = "";
+        jnlContainer.innerHTML = "<h4>📖 Arsip Teaching-Learning Journal (Log Pengajaran Trainer)</h4>";
+
+        const keys = Object.keys(recordedSessions).sort().reverse();
+
+        if(keys.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px; color: #64748b;">Belum ada data sesi harian tersimpan.</td></tr>`;
+            jnlContainer.innerHTML += `<p style="font-size:0.85rem; color:#64748b; font-style:italic;">Belum ada jurnal pengajaran tercatat.</p>`;
+            return;
+        }
+
+        keys.forEach(key => {
+            const session = recordedSessions[key];
+            
+            if(session.journal) {
+                jnlContainer.innerHTML += `
+                    <div class="print-journal-card">
+                        <strong>📅 Tanggal:</strong> ${session.date} | <strong>Modul:</strong> ${session.sectorInfo} | <strong>Instruktur:</strong> ${session.instructor}
+                        <br><strong>• Topik/Materi:</strong> ${session.journal.topic}
+                        <br><strong>• Metode:</strong> ${session.journal.method}
+                        <br><strong>• Kendala:</strong> ${session.journal.obstacle} | <strong>Evaluasi:</strong> ${session.journal.evaluation}
+                    </div>
+                `;
+            }
+
+            const sessionLogs = session.students || {};
+            Object.keys(sessionLogs).forEach(idx => {
+                const log = sessionLogs[idx];
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="font-weight:600; font-size:0.8rem;">${session.date}<br><span style="color:var(--primary-color);">${session.sectorInfo} [${session.instructor}]</span></td>
+                        <td><strong>${log.name}</strong></td>
+                        <td class="checkbox-center">${log.present ? '<span style="color:#166534; font-weight:bold;">Hadir (✔)</span>' : '<span style="color:#dc2626;">Tidak Hadir</span>'}</td>
+                        <td style="text-align:center;">
+                            ${log.sig ? `<img src="${log.sig}" style="max-height:45px; display:block; margin:0 auto;">` : '<span style="color:#94a3b8; font-style:italic;">[ Kosong ]</span>'}
+                        </td>
+                    </tr>
+                `;
+            });
+        });
+    }
+
+    window.onload = function() {
+        buildLiveRoster();
+    };
 </script>
 
 </body>
